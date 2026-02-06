@@ -6,6 +6,9 @@ export default async function handler(req, res) {
 
   try {
     const payload = req.body;
+    console.log("HEADERS:", req.headers);
+    console.log("PAYLOAD:", JSON.stringify(payload));
+
 
     // Tenta achar o phone nos formatos mais comuns
     const rawPhone =
@@ -79,3 +82,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
