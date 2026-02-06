@@ -43,20 +43,22 @@ export default async function handler(req, res) {
     }
 
     // URL do SendPulse (configure como variável de ambiente)
-    const sendpulseUrl = process.env.SENDPULSE_EVENT_URL;
-    if (!sendpulseUrl) {
-      return res.status(500).json({
-        ok: false,
-        error: "Missing SENDPULSE_EVENT_URL env var"
-      });
-    }
+   const sendpulseUrl = process.env.SENDPULSE_EVENT_URL;
+const token = process.env.SENDPULSE_TOKEN;
 
-    // Reenvia para o SendPulse
-    const spResp = await fetch(sendpulseUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+const headers = { "Content-Type": "application/json" };
+
+// Se tiver token, manda no header (formato comum)
+if (token) {
+  headers["Authorization"] = `Bearer ${token}`;
+}
+
+const spResp = await fetch(sendpulseUrl, {
+  method: "POST",
+  headers,
+  body: JSON.stringify(payload)
+});
+
 
     const spText = await spResp.text();
 
@@ -82,4 +84,5 @@ export default async function handler(req, res) {
     });
   }
 }
+
 
